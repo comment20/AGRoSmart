@@ -294,7 +294,7 @@ def upload_image_view(request):
         form = SoilImageForm(request.POST, request.FILES)
         if form.is_valid():
             img_file = request.FILES["image"]
-
+            
             # S'assurer que le dossier media existe (nécessaire sur Render car ignoré par Git)
             if not os.path.exists(settings.MEDIA_ROOT):
                 os.makedirs(settings.MEDIA_ROOT)
