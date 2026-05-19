@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'style3.css' %}">
+
+<div class="analysis-page-container">
+    <div class="analysis-card">
+        <h2>Entrez les caractéristiques du sol</h2>
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">
+            Remplissez les paramètres physico-chimiques pour obtenir une recommandation de culture personnalisée.
+        </p>
+        
+        <form method="POST" action="{% url 'analyze_characteristics' %}">
+            {% csrf_token %}
+            <div class="form-grid">
+                {{ form.as_p }}
+            </div>
+
+            <!-- Localisation -->
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">
+            <input type="hidden" id="location_name" name="location_name">
+            
+            <div class="form-submit-container">
+                <button type="submit" class="btn-submit">
+                    Lancer l'analyse experte
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    function captureLocation() {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lon;
+                
+                try {
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                    const data = await response.json();
+                    const city = data.address.city || data.address.town || data.address.village || "Zone inconnue";
+                    document.getElementById('location_name').value = city;
+                } catch (e) {
+                    document.getElementById('location_name').value = "Coordonnées GPS";
+                }
+            }, (err) => console.warn("GPS Indisponible", err));
+        }
+    }
+    captureLocation();
+});
+</script>
+{% endblock %}

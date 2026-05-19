@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'style3.css' %}">
+
+<div class="result-page-container">
+    <div class="result-card">
+        <h1 class="form-title">Analyse Terminée</h1>
+        <span class="subtitle">Diagnostic généré par le modèle  d'IA</span>
+
+        <div class="image-container">
+            <img src="{{ image_url }}" alt="Sol">
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <span class="label">Nature du Sol</span>
+                <span class="value">{{ predicted_class|title }}</span>
+            </div>
+            
+            <div class="stat-card">
+                <span class="label">Précision du Diagnostic</span>
+                <span class="value percentage" id="confidence-value">0.0%</span>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a href="{% url 'analyze_characteristics' %}" class="btn-primary">
+                Continuer l'analyse
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </a>
+            <a href="{% url 'upload_image' %}" class="btn-secondary">
+                ← Reprendre une photo
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const targetValue = parseFloat("{{ probability_percentage|default:0 }}");
+    const display = document.getElementById('confidence-value');
+    let current = 0;
+    const duration = 1500; // Durée de l'animation en ms
+    const frameRate = 20; // ms entre chaque mise à jour
+    const totalFrames = duration / frameRate;
+    const increment = targetValue / totalFrames;
+    
+    const animate = () => {
+        if (current < targetValue) {
+            current += increment;
+            display.innerText = Math.min(current, targetValue).toFixed(1) + '%';
+            setTimeout(animate, frameRate);
+        } else {
+            display.innerText = targetValue.toFixed(1) + '%';
+        }
+    };
+    
+    setTimeout(animate, 500); // Petit délai pour laisser la carte apparaître
+});
+</script>
+{% endblock %}

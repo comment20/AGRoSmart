@@ -1,0 +1,301 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+    <title>Accueil - Analyse de Sol Intelligente</title>
+    <style>
+        /* Chatbot Icon */
+        .chatbot-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #2c5e3f; /* Primary color */
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        .chatbot-icon:hover {
+            transform: scale(1.05);
+        }
+        .chatbot-icon svg {
+            width: 30px;
+            height: 30px;
+        }
+
+        /* Chatbot Window */
+        .chatbot-window {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            z-index: 999;
+            overflow: hidden;
+            transform: translateY(100%) scale(0.8);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            pointer-events: none; /* Disable interactions when hidden */
+        }
+        .chatbot-window.open {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+            pointer-events: auto; /* Enable interactions when open */
+        }
+
+        .chatbot-header {
+            background-color: #2c5e3f;
+            color: white;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chatbot-header .clear-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .chatbot-header .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        .chatbot-messages {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .message-bubble {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .message-user {
+            align-self: flex-end;
+            background-color: #2c5e3f;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+        .message-bot {
+            align-self: flex-start;
+            background-color: white;
+            color: #1e293b;
+            border-bottom-left-radius: 4px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        /* Stylisation du contenu généré par l'IA */
+        .message-bot ul, .message-bot ol {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+        .message-bot li {
+            margin-bottom: 4px;
+        }
+        .message-bot strong {
+            color: #2c5e3f;
+        }
+
+        
+        /* --- Styles for Delete Functionality --- */
+        .message-options {
+            position: absolute;
+            top: 0px;
+            right: 5px;
+            display: none;
+        }
+        .message-bubble:hover .message-options {
+            display: block;
+        }
+        .options-btn {
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            font-size: 1.2em;
+            padding: 2px 5px;
+            border-radius: 50%;
+        }
+        .options-btn:hover {
+            background-color: rgba(0,0,0,0.1);
+        }
+        .options-menu {
+            position: absolute;
+            top: 25px;
+            right: 0;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 10;
+            overflow: hidden;
+            display: none; /* Hidden by default, shown by JS */
+        }
+        .options-menu a {
+            display: block;
+            padding: 8px 15px;
+            color: #333;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+        .options-menu a:hover {
+            background-color: #f0f0f0;
+        }
+        /* --- End of Delete Styles --- */
+
+        .chatbot-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #eee;
+            background-color: white;
+        }
+        .chatbot-input input {
+            flex-grow: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 10px 15px;
+            font-size: 1em;
+            margin-right: 10px;
+        }
+        .chatbot-input button {
+            background-color: #2c5e3f;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        .chatbot-input button:hover {
+            background-color: #224a32;
+        }
+    </style>
+</head>
+
+<div class="home-container">
+    <div id="location-weather" class="location-weather">
+        <span class="icon-display location-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z"/></svg>
+        </span>
+        <span id="location-text">Chargement...</span>
+        <span class="separator">|</span>
+        <span class="icon-display temperature-icon">
+        </span>
+        <span id="temperature-text">--°C</span>
+    </div>
+    <!-- SECTION 1: HÉROS -->
+    <section id="hero">
+        <div class="hero-content">
+            <h1 class="hero-title"><span id="typed-title">Analyse de Sol Intelligente</span></h1>
+            <p class="hero-subtitle">
+                Chargez une image de votre sol pour obtenir instantanément  son type , des recommandations de cultures adaptées à votre parcelle grâce à l’intelligence artificielle en utilisant   notre chatbot AGROsmart IA  .
+            </p>
+            <!-- Bouton de prédiction -->
+            <a href="{% url 'upload_image' %}" class="start-analysis-btn">commencez une analyse</a>
+            
+        </div>
+        <div class="hero-images-right">
+            <img src="{% static 'soil.jpg' %}" alt="Soil 1" class="hero-decorative-img hero-img-1">
+            <img src="{% static 'soil_hand.jpg' %}" alt="Soil 2" class="hero-decorative-img hero-img-2">
+            <img src="{% static 'soil_hand2.jpg' %}" alt="Soil 3" class="hero-decorative-img hero-img-3">
+        </div>
+    </section>
+
+    <!-- SECTION 2: CARACTÉRISTIQUES -->
+    <section id="features">
+        <h2 class="section-title">Comment ça marche ?</h2>
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg fill="#000000" width="64px" height="64px" viewBox="0 0 24 24" id="upload-cloud" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="icon line-color"><path id="secondary" d="M16,14l-4-4-4,4" style="fill: none; stroke: #2ca9bc; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path><path id="primary" d="M12,10v9m0,3a9,9,0,0,1-5.21-16.5A6.49,6.49,0,0,1,12,2a6.49,6.49,0,0,1,5.21,3.5A9,9,0,0,1,12,22Z" style="fill: none; stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></svg>
+                </div>
+                <h3>1. Uploadez</h3>
+                <p>Choisissez une image claire de la terre que vous souhaitez analyser.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg fill="#000000" width="64px" height="64px" viewBox="0 0 24 24" id="chart-magnifying-glass" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="icon line-color">
+                        <path id="secondary" d="M13,8V20a1,1,0,0,1-2,0V8a1,1,0,0,1,2,0Z" style="fill: #2ca9bc; stroke-width: 2;"></path>
+                        <path id="primary" d="M17,3h2a1,1,0,0,1,1,1V17" style="fill: none; stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path>
+                        <path id="primary-2" data-name="primary" d="M4,20H16a1,1,0,0,0,1-1V3a1,1,0,0,0-1-1H4A1,1,0,0,0,3,4V19A1,1,0,0,0,4,20Zm4-8h2m-2,4h2" style="fill: none; stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path>
+                    </svg>
+                </div>
+                <h3>2. Analysez</h3>
+                <p>Notre modèle IA de pointe examine la texture, la couleur et la composition.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64px" height="64px" viewBox="0 0 24 24">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                        <path d="m10.41 13.41-2.83 2.83-1.41-1.41L10.41 12l-4.24-4.24 1.41-1.41 2.83 2.83 5.66-5.66 1.41 1.41L10.41 13.41z"/>
+                    </svg>
+                </div>
+                <h3>3. Obtenez des Résultats</h3>
+                <p>Recevez instantanément le type de sol identifié avec un score de confiance.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: À PROPOS -->
+   
+</div>
+
+<!-- Chatbot Icon -->
+<div class="chatbot-icon" id="chatbot-icon">
+    <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM19 15H6L4 17V4H19V15Z"/>
+    </svg>
+</div>
+
+<!-- Chatbot Window -->
+<div class="chatbot-window" id="chatbot-window">
+    <div class="chatbot-header">
+        <span>AGROsmart IA</span>
+        <div>
+            <button class="clear-btn" id="clear-chat-btn" title="Effacer la conversation">&#128465;</button>
+            <button class="close-btn" id="close-chatbot-btn">&times;</button>
+        </div>
+    </div>
+    <div class="chatbot-messages" id="chatbot-messages"></div>
+    <div class="chatbot-input">
+        <input type="text" id="chatbot-input-field" placeholder="Tapez votre message...">
+        <button id="send-message-btn">Envoyer</button>
+    </div>
+</div>
+
+<script src="{% static 'home.js' %}"></script>
+
+
+{% endblock %}

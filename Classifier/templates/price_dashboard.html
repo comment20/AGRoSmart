@@ -1,0 +1,338 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligence des Marchés - AGROsmart</title>
+    <link rel="stylesheet" href="{% static 'price_dashboard.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <div class="logo">
+                <a href="{% url 'selection' %}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                    <img src="{% static 'boval.jpg' %}" alt="Logo">
+                    <span>AGROsmart</span>
+                </a>
+            </div>
+            <nav>
+                <a href="{% url 'selection' %}">Retour au Hub</a>
+                <a href="{% url 'agro_logout' %}" class="logout">Déconnexion</a>
+            </nav>
+        </header>
+
+        <main>
+            <div class="page-title">
+                <h1>Intelligence des Marchés</h1>
+                <p>Analysez les tendances et anticipez les fluctuations des prix agricoles au Cameroun.</p>
+            </div>
+
+            <section class="controls-card">
+                <form id="prediction-form" class="controls-grid">
+                    <div class="control-group">
+                        <label>Produit</label>
+                        <select id="product-select" required>
+                            <option value="">Sélectionner un produit</option>
+                            {% for p in products %}
+                                <option value="{{ p }}">{{ p }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Région</label>
+                        <select id="region-select" required>
+                            <option value="">Sélectionner une région</option>
+                            {% for r in regions %}
+                                <option value="{{ r }}">{{ r }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Département</label>
+                        <select id="dept-select" required>
+                            <option value="">Sélectionner un département</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Durée (Mois)</label>
+                        <select id="months-select">
+                            <option value="3">3 mois</option>
+                            <option value="6" selected>6 mois</option>
+                            <option value="12">12 mois</option>
+                            <option value="24">24 mois</option>
+                            <option value="48">48 mois (4 ans)</option>
+                            <option value="96">96 mois (8 ans)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-predict">Lancer la prévision</button>
+                </form>
+            </section>
+
+            <!-- Nouvelle barre de KPIs horizontale -->
+            <section class="kpi-row">
+                <div class="kpi-card">
+                    <span class="label">Prix Actuel</span>
+                    <span class="value" id="current-price">--</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="label">Tendance Prédite</span>
+                    <span class="value trend" id="price-trend">--</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="label">Variation Annuelle</span>
+                    <span class="value" id="yearly-variation">--</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="label">Min / Max</span>
+                    <span class="value"><span id="min-price">--</span> / <span id="max-price">--</span></span>
+                </div>
+                <div class="kpi-card">
+                    <span class="label">Moyenne / Médiane</span>
+                    <span class="value"><span id="avg-price">--</span> / <span id="median-price">--</span></span>
+                </div>
+            </section>
+
+            <div class="results-grid">
+                <div class="chart-card">
+                    <div class="card-header">
+                        <h3>Évolution des Prix (FCFA/kg)</h3>
+                        <div id="chart-legend"></div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="priceChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="map-card">
+                    <h3>Prix Moyens de Quelques Marchés au Cameroun</h3>
+                    <div id="map"></div>
+                    <div class="map-legend">
+                        <span class="legend-label">Moins cher (Vert)</span>
+                        <div class="legend-bar"></div>
+                        <span class="legend-label">Plus cher (Rouge)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nouvelle section pour le tableau des prévisions -->
+            <section class="forecast-table-card" id="forecast-section" style="display: none; margin-top: 25px;">
+                <div class="card-header">
+                    <h3>Détails des Prévisions Futures</h3>
+                    <button class="btn-outline" onclick="exportForecast()">Exporter les prévisions</button>
+                </div>
+                <div class="table-container">
+                    <table id="forecast-table">
+                        <thead>
+                            <tr>
+                                <th>Mois Prédit</th>
+                                <th>Prix Estimé (FCFA/kg)</th>
+                                <th>Variation (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="forecast-body"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        let priceChart;
+        let map;
+        let markersGroup;
+        
+        const regionDeptMapping = JSON.parse('{{ region_dept_mapping_json|safe }}');
+
+        function initMap() {
+            map = L.map('map').setView([7.3697, 12.3547], 6);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+            markersGroup = L.layerGroup().addTo(map);
+        }
+
+        initMap();
+
+        document.getElementById('region-select').addEventListener('change', function() {
+            const depts = regionDeptMapping[this.value] || [];
+            const deptSelect = document.getElementById('dept-select');
+            deptSelect.innerHTML = '<option value="">Sélectionner un département</option>';
+            depts.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = opt.textContent = d;
+                deptSelect.appendChild(opt);
+            });
+        });
+
+        document.getElementById('prediction-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const product = document.getElementById('product-select').value;
+            const region = document.getElementById('region-select').value;
+            const department = document.getElementById('dept-select').value;
+            const months = document.getElementById('months-select').value;
+
+            fetch(`?product=${product}&region=${region}&department=${department}&months=${months}`, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    updateChart(data.historical, data.forecast);
+                    updateStats(data.historical, data.forecast);
+                    updateMap(data.map_points);
+                    updateForecastTable(data.historical, data.forecast);
+                    hideNoModelWarning();
+                    if (!data.forecast) showNoModelWarning(product, department);
+                } else if (data.status === 'no_data') {
+                    handleNoData(data.message);
+                }
+            });
+        });
+
+        function updateChart(historical, forecast) {
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            let labels = [...historical.dates];
+            let forecastData = [];
+            if (forecast) {
+                labels = [...historical.dates, ...forecast.dates];
+                forecastData = Array(historical.prices.length - 1).fill(null).concat([historical.prices[historical.prices.length-1], ...forecast.prices]);
+            }
+            if (priceChart) priceChart.destroy();
+            priceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'Historique', data: historical.prices, borderColor: '#2D5A27', backgroundColor: 'rgba(45, 90, 39, 0.1)', fill: true, tension: 0.3, pointRadius: 0 },
+                        { label: 'Prévisions', data: forecastData, borderColor: '#F4A261', borderDash: [5, 5], tension: 0.3, pointRadius: 4 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+        }
+
+        function updateMap(points) {
+            markersGroup.clearLayers();
+            if (!points || points.length === 0) return;
+            const prices = points.map(p => p.price_per_kg);
+            const minP = Math.min(...prices), maxP = Math.max(...prices);
+            points.forEach(p => {
+                const ratio = maxP === minP ? 0.5 : (p.price_per_kg - minP) / (maxP - minP);
+                const color = `rgb(${Math.floor(255 * ratio)}, ${Math.floor(255 * (1 - ratio))}, 0)`;
+                L.circleMarker([p.latitude, p.longitude], { radius: 8, fillColor: color, color: "#fff", weight: 2, fillOpacity: 0.8 })
+                    .bindPopup(`<strong>${p.market}</strong><br>${p.price_per_kg.toFixed(0)} FCFA/kg`)
+                    .addTo(markersGroup);
+            });
+            const group = new L.featureGroup(markersGroup.getLayers());
+            map.fitBounds(group.getBounds().pad(0.2));
+        }
+
+        function exportForecast() {
+            let csv = "Mois,Prix Predite (FCFA/kg)\n";
+            const rows = document.querySelectorAll("#forecast-body tr");
+            rows.forEach(row => {
+                const cols = row.querySelectorAll("td");
+                csv += `${cols[0].innerText},${cols[1].innerText.replace(' FCFA', '')}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'previsions_prix.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function updateForecastTable(historical, forecast) {
+            const section = document.getElementById('forecast-section');
+            const body = document.getElementById('forecast-body');
+            body.innerHTML = '';
+            
+            if (!forecast) {
+                section.style.display = 'none';
+                return;
+            }
+
+            section.style.display = 'block';
+            const lastHist = historical.prices[historical.prices.length - 1];
+
+            forecast.dates.forEach((date, i) => {
+                const price = forecast.prices[i];
+                const diff = ((price - lastHist) / lastHist) * 100;
+                const row = `
+                    <tr>
+                        <td><strong>${new Date(date).toLocaleDateString('fr-FR', {month: 'long', year: 'numeric'})}</strong></td>
+                        <td class="price-cell">${price.toFixed(0)} <small>FCFA</small></td>
+                        <td>
+                            <span class="trend-badge ${diff > 0 ? 'up' : 'down'}">
+                                ${diff > 0 ? '▲' : '▼'} ${Math.abs(diff).toFixed(1)}%
+                            </span>
+                        </td>
+                    </tr>
+                `;
+                body.innerHTML += row;
+            });
+        }
+
+        function updateStats(historical, forecast) {
+            const prices = historical.prices;
+            const lastHist = prices[prices.length - 1];
+            
+            // Stats de base
+            document.getElementById('current-price').innerHTML = `${lastHist.toFixed(0)} <small>FCFA</small>`;
+            document.getElementById('max-price').innerHTML = `${Math.max(...prices).toFixed(0)} <small>FCFA</small>`;
+            
+            // Min, Moyenne, Médiane
+            const min = Math.min(...prices);
+            const avg = prices.reduce((a, b) => a + b, 0) / prices.length;
+            const sorted = [...prices].sort((a, b) => a - b);
+            const median = sorted.length % 2 !== 0 ? sorted[Math.floor(sorted.length / 2)] : (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2;
+
+            document.getElementById('min-price').innerHTML = `${min.toFixed(0)} <small>FCFA</small>`;
+            document.getElementById('avg-price').innerHTML = `${avg.toFixed(0)} <small>FCFA</small>`;
+            document.getElementById('median-price').innerHTML = `${median.toFixed(0)} <small>FCFA</small>`;
+
+            // Tendance prédite
+            const trendEl = document.getElementById('price-trend');
+            if (forecast) {
+                const lastFore = forecast.prices[forecast.prices.length - 1];
+                const diff = ((lastFore - lastHist) / lastHist) * 100;
+                trendEl.innerHTML = `<span class="trend-badge ${diff > 0 ? 'up' : 'down'}">${diff > 0 ? '+' : ''}${diff.toFixed(1)}%</span>`;
+            } else { 
+                trendEl.innerHTML = `<span class="trend-badge neutral">N/A</span>`; 
+            }
+
+            // Variation annuelle
+            const variationEl = document.getElementById('yearly-variation');
+            if (prices.length >= 13) {
+                const priceYearAgo = prices[prices.length - 13];
+                const yearlyDiff = ((lastHist - priceYearAgo) / priceYearAgo) * 100;
+                variationEl.innerHTML = `<span class="trend-badge ${yearlyDiff > 0 ? 'up' : 'down'}">${yearlyDiff > 0 ? '+' : ''}${yearlyDiff.toFixed(1)}%</span>`;
+            } else {
+                variationEl.innerHTML = `<span class="trend-badge neutral">N/A</span>`;
+            }
+        }
+
+        function handleNoData(msg) {
+            if (priceChart) priceChart.destroy();
+            markersGroup.clearLayers();
+            document.getElementById('chart-legend').innerHTML = `<div style="background: #FFFBEB; color: #92400E; padding: 15px; border-radius: 12px; font-weight: 600; text-align: center;">⚠️ ${msg}</div>`;
+        }
+
+        function showNoModelWarning(p, d) {
+            document.getElementById('chart-legend').innerHTML = `<span style="color: #64748B; font-style: italic;">ℹ️ Historique affiché. Prévisions IA non dispos pour ${p} à ${d}.</span>`;
+        }
+
+        function hideNoModelWarning() {
+            document.getElementById('chart-legend').innerHTML = `<div style="display: flex; gap: 15px;"><span style="color: #2D5A27;">● Historique</span><span style="color: #F4A261;">● Prévisions IA</span></div>`;
+        }
+    </script>
+</body>
+</html>

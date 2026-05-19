@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue sur AGROsmart</title>
+    <link rel="stylesheet" href="{% static 'connexion.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="main-container">
+        <!-- Section Visuelle (Gauche) -->
+        <div class="visual-section">
+            <div class="visual-content">
+                <div class="logo-top">
+                    <img src="{% static 'boval.jpg' %}" alt="Logo">
+                    <span>AGROsmart</span>
+                </div>
+                <h1>L'avenir de l'agriculture  et du marché  agricole entre vos mains.</h1>
+                <p>Analysez votre type de sol et obtenez des recommandations de cultures adaptées à votre sol , suivez les prix du marché  grâce aux modèles de serie temporelles.</p>
+            </div>
+            <div class="visual-footer">
+                <p>© 2026 AGROsmart. Propulsé par  Tchoupe Germain Boval.</p>
+            </div>
+        </div>
+
+        <!-- Section Formulaire (Droite) -->
+        <div class="form-section">
+            <div class="form-box">
+                <!-- Toggle Mobile (Logo visible uniquement sur petit écran) -->
+                <div class="mobile-logo">
+                    <img src="{% static 'boval.jpg' %}" alt="Logo">
+                </div>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}" style="padding: 12px; border-radius: 10px; margin-bottom: 20px; font-size: 0.9rem; background: {% if message.tags == 'success' %}#dcfce7; color: #166534;{% else %}#fee2e2; color: #991b1b;{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- Formulaire de Connexion -->
+                <div id="login-container" class="auth-container active">
+                    <h2>Bon retour !</h2>
+                    <p class="subtitle">Veuillez entrer vos identifiants pour continuer.</p>
+                    
+                    <form method="POST" action="{% url 'connexion' %}">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <label for="id_username">Nom d'utilisateur</label>
+                            {{ login_form.username }}
+                            {% if login_form.username.errors %}
+                                <span class="error-text">{{ login_form.username.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="id_password">Mot de passe</label>
+                            {{ login_form.password }}
+                            {% if login_form.password.errors %}
+                                <span class="error-text">{{ login_form.password.errors.0 }}</span>
+                            {% endif %}
+                            <div style="text-align: right; margin-top: 5px;">
+                                <a href="{% url 'password_reset' %}" style="font-size: 0.85rem; color: #22c55e; text-decoration: none;">Mot de passe oublié ?</a>
+                            </div>
+                        </div>
+
+                        {% if login_form.non_field_errors %}
+                            <div class="form-errors alert">{{ login_form.non_field_errors.0 }}</div>
+                        {% endif %}
+
+                        <button type="submit" class="btn-primary">Se connecter</button>
+                    </form>
+                    
+                    <p class="switch-text">Vous n'avez pas de compte ? <a href="#" id="to-signup">S'inscrire gratuitement</a></p>
+                </div>
+
+                <!-- Formulaire d'Inscription -->
+                <div id="signup-container" class="auth-container">
+                    <h2>Rejoignez-nous</h2>
+                    <p class="subtitle">Commencez à optimiser vos terres dès aujourd'hui.</p>
+                    
+                    <form method="POST" action="{% url 'signup' %}">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <label for="id_username">Nom d'utilisateur</label>
+                            {{ signup_form.username }}
+                            {% if signup_form.username.errors %}
+                                <span class="error-text">{{ signup_form.username.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="id_email">Email</label>
+                            {{ signup_form.email }}
+                            {% if signup_form.email.errors %}
+                                <span class="error-text">{{ signup_form.email.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label for="id_password1">Mot de passe</label>
+                                {{ signup_form.password1 }}
+                            </div>
+                            <div class="input-group">
+                                <label for="id_password2">Confirmation</label>
+                                {{ signup_form.password2 }}
+                            </div>
+                        </div>
+                        {% if signup_form.password1.errors %}
+                            <span class="error-text">{{ signup_form.password1.errors.0 }}</span>
+                        {% endif %}
+
+                        {% if signup_form.non_field_errors %}
+                            <div class="form-errors alert">{{ signup_form.non_field_errors.0 }}</div>
+                        {% endif %}
+
+                        <button type="submit" class="btn-primary">Créer mon compte</button>
+                    </form>
+                    
+                    <p class="switch-text">Vous avez déjà un compte ? <a href="#" id="to-login">Se connecter</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'connexion.js' %}"></script>
+</body>
+</html>

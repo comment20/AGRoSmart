@@ -1,0 +1,98 @@
+/* Appliquer l’image de fond */
+body {
+    background: url("../static/font2.jpg") no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+ }
+
+ /* Conteneur principal du formulaire */
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 16px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    text-align: center;
+}
+
+/* Titre */
+.container h2 {
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+    color: #333;
+}
+
+/* Le formulaire centré */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Champs du formulaire */
+form p {
+    width: 100%;
+    max-width: 400px;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+form label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+    color: #444;
+}
+
+form input[type="number"],
+form input[type="text"],
+form input[type="float"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+form input:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+/* Bouton stylisé et centré */
+form button[type="submit"] {
+    margin-top: 20px;
+    padding: 12px 24px;
+    background-color: #008CBA;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    max-width: 300px;
+}
+
+form button[type="submit"]:hover {
+    background-color: #005f73;
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+    .container {
+        padding: 25px;
+    }
+
+    form p {
+        max-width: 100%;
+    }
+
+    form button {
+        font-size: 0.95rem;
+    }
+}

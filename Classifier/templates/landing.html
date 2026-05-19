@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGROsmart - Analyse de Sol & Marché Agricole</title>
+    <link rel="stylesheet" href="{% static 'landing.css' %}">
+</head>
+<body>
+
+    <!-- Conteneur du Slider -->
+    <div class="hero-slider">
+        
+        <!-- Diapositive 1 -->
+        <div class="slide active" id="slide1">
+            <div class="slide-content">
+                <h1 class="slide-title">Effectuez La prédiction de votre type de sol  et obtenez des recommandations de cultures adaptées à votre sol</h1>
+            </div>
+        </div>
+
+        <!-- Diapositive 2 -->
+        <div class="slide" id="slide2">
+            <div class="slide-content">
+                <h1 class="slide-title"> Prévision des prix des produits agricoles dans le temps a l'aide des séries temporelles </h1>
+            </div>
+        </div>
+
+        <!-- Diapositive 3 -->
+        <div class="slide" id="slide3">
+            <div class="slide-content">
+                <h1 class="slide-title">Prediction des types de cultures a l'aide  des caractéristique chimiques du sols (PH,N,P,K,Précipitation)</h1>
+            </div>
+        </div>
+
+        <!-- Superposition pour le logo et le bouton -->
+        <div class="overlay-content">
+            <div class="logo-container">
+                <img src="{% static 'boval.jpg' %}" alt="AGROsmart Logo">
+                <span>AGROsmart</span>
+            </div>
+            <a href="{% url 'connexion' %}" class="cta-button">Passer</a>
+        </div>
+
+        <!-- Navigation par points -->
+        <div class="slider-nav">
+            <span class="nav-dot active" data-slide="0"></span>
+            <span class="nav-dot" data-slide="1"></span>
+            <span class="nav-dot" data-slide="2"></span>
+        </div>
+
+    </div>
+
+    <script src="{% static 'landing.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Historique des Prédictions</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 10px;
+            margin: 20px;
+        }
+        h1 {
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .confidence {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Historique des Prédictions</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Date et Heure</th>
+                <th>Nom de l'image</th>
+                <th>Type de sol prédit</th>
+                <th>Confiance</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Nom de la Localisation</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prediction in predictions %}
+            <tr>
+                <td>{{ prediction.timestamp|date:"d/m/Y H:i:s" }}</td>
+                <td>{{ prediction.image_name }}</td>
+                <td>{{ prediction.soil_type }}</td>
+                <td>{{ prediction.confidence|floatformat:2 }}%</td>
+                <td>{{ prediction.latitude|default:"N/A" }}</td>
+                <td>{{ prediction.longitude|default:"N/A" }}</td>
+                <td>{{ prediction.location_name|default:"N/A" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

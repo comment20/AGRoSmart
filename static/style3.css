@@ -1,0 +1,276 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --primary: #10b981;      /* Vert Émeraude moderne */
+    --primary-dark: #059669;
+    --bg-page: #fdfdfd;      /* Presque blanc, pas d'image */
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --card-bg: #ffffff;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: linear-gradient(180deg, #f1f5f9 0%, #ffffff 100%); /* Fond dégradé très pro */
+    background-attachment: fixed; /* Le fond reste fixe pendant le scroll */
+    background-image: none !important; /* Force la suppression de l'image globale font.jpg */
+    color: var(--text-main);
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.result-page-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+.result-card {
+    background: var(--card-bg);
+    border-radius: 32px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08); /* Ombre douce et profonde */
+    width: 100%;
+    max-width: 500px;
+    padding: 48px;
+    text-align: center;
+    border: 1px solid #f1f5f9;
+    
+    /* Animation d'entrée */
+    animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cardAppear {
+    from { opacity: 0; transform: translateY(40px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Image avec effet de zoom au survol */
+.image-container {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 32px;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.image-container:hover {
+    transform: scale(1.05) rotate(2deg);
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.form-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin: 0 0 8px 0;
+    background: linear-gradient(to right, var(--text-main), var(--primary-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 32px;
+    display: block;
+}
+
+/* Stats avec animation de cascade */
+.stats-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.stat-card:hover {
+    background: #fff;
+    border-color: var(--primary);
+    transform: translateX(5px);
+    box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1);
+}
+
+.label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.percentage {
+    color: var(--primary);
+}
+
+/* Boutons Dynamiques */
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    padding: 18px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px -5px rgba(16, 185, 129, 0.4);
+}
+
+.btn-secondary {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 10px;
+    transition: color 0.2s;
+}
+
+.btn-secondary:hover {
+    color: var(--text-main);
+}
+
+/* --- Styles pour la page d'analyse des caractéristiques --- */
+.analysis-page-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+}
+
+.analysis-card {
+    background: var(--card-bg);
+    border-radius: 32px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 850px;
+    padding: 48px;
+    border: 1px solid #f1f5f9;
+    animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.analysis-card h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin: 0 0 12px 0;
+    text-align: center;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 40px;
+    margin-top: 40px;
+}
+
+.form-grid p {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-grid label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+}
+
+.form-grid input {
+    width: 100%;
+    padding: 14px 18px;
+    background: #f8fafc;
+    border: 2px solid #f1f5f9;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--text-main);
+    transition: all 0.2s ease;
+}
+
+.form-grid input:focus {
+    outline: none;
+    background: #fff;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+.form-submit-container {
+    margin-top: 48px;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-submit {
+    background: var(--primary);
+    color: white;
+    padding: 18px 60px;
+    border-radius: 20px;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-submit:hover {
+    background: var(--primary-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px -5px rgba(16, 185, 129, 0.4);
+}
+
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    .analysis-card {
+        padding: 32px 24px;
+    }
+    .analysis-card h2 {
+        font-size: 1.5rem;
+    }
+}

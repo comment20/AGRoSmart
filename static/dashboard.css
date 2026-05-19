@@ -1,0 +1,175 @@
+/* dashboard.css - Thème Modern Lab */
+
+body {
+    background: radial-gradient(circle at top left, #f8fafc, #ffffff); /* Fond dégradé doux */
+    background-attachment: fixed;
+    background-image: none !important; /* Force la suppression de font.jpg */
+    margin: 0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Optionnel : Ajout d'un petit motif de grille très discret pour le côté "scientifique" */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+    background-size: 40px 40px; /* Taille de la grille */
+    opacity: 0.3; /* Très subtil */
+    z-index: -1;
+    pointer-events: none;
+}
+
+.dashboard-page-container {
+    padding: 60px 20px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.dashboard-filter-section {
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: center;
+}
+
+.filter-card {
+    background: #ffffff;
+    padding: 20px 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+.filter-card label {
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 1rem;
+}
+
+.locality-dropdown {
+    padding: 12px 25px;
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    background: #f8fafc;
+    font-family: inherit;
+    font-weight: 600;
+    color: #1e293b;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 250px;
+}
+
+.locality-dropdown:focus {
+    outline: none;
+    border-color: #10b981;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+.dashboard-section {
+    margin-bottom: 80px;
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-header-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 40px;
+    text-align: left;
+    position: relative;
+    padding-left: 20px;
+}
+
+.dashboard-header-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 35px;
+    background: #10b981;
+    border-radius: 3px;
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    align-items: start;
+}
+
+.chart-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f1f5f9;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-card h3 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #64748b;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Taille spécifique pour les camemberts (Pie) */
+.pie-wrapper {
+    width: 250px; /* Taille fixe réduite pour les cercles */
+    height: 250px;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Taille pour les histogrammes */
+.hist-wrapper {
+    width: 100%;
+    height: 250px;
+    position: relative;
+}
+
+/* Taille pour les barres horizontales (Full Width) */
+.full-width .chart-wrapper {
+    width: 100%;
+    height: 350px; /* Plus d'espace pour les étiquettes de texte */
+    position: relative;
+}
+
+.full-width {
+    grid-column: span 2;
+}
+
+canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+@media (max-width: 1024px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+    .full-width {
+        grid-column: span 1;
+    }
+    .dashboard-header-title {
+        font-size: 1.75rem;
+    }
+}
