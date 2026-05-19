@@ -22,4 +22,4 @@
 4. Lancez le serveur : `python SoilClassifier/manage.py run server`
 
 ## 👨‍💻 Auteur
-**Boval Germain Tchoupe** - Développeur Full-Stack & Passionné d'IA Agricole.
+**Boval Germain Tchoupe** - DATA Scienctist Junior.
