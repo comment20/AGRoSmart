@@ -167,5 +167,5 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'AGROsmart <noreply@agrosma
 # Clé API Google Gemini (Obtenez-la sur https://aistudio.google.com/)
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', "")
 
-# Utilisation de WhiteNoise pour les fichiers statiques en production
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Utilisation de WhiteNoise pour les fichiers statiques en production (version simplifiée sans hashing)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
