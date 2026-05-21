@@ -289,10 +289,17 @@ header {
 
 @media (max-width: 480px) {
     .logo span {
-        display: none; /* Cacher le nom de l'app sur très petit écran pour laisser de la place au bouton logout */
+        display: block; /* S'assurer que le nom est visible */
+        font-size: 1rem;
     }
 
     .logout-btn {
-        gap: 4px;
+        padding: 8px;
+        font-size: 0; /* Cache le texte "Déconnexion" */
+        gap: 0;
+    }
+    
+    .logout-btn svg {
+        margin: 0;
     }
 }
