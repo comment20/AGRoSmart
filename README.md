@@ -6,7 +6,7 @@
 - **Classification des Sols** : Identifiez le type de sol (Noir, Argileux, Sableux, etc.) à partir d'une simple photo.
 - **Recommandation de Cultures** : Recevez des suggestions personnalisées de cultures basées sur les paramètres physico-chimiques (N, P, K, pH, etc.).
 - **Dashboard des Marchés** : Visualisez l'historique et les prévisions de prix des produits agricoles par région et département au Cameroun.
-- **AGROsmart IA** : Un assistant conversationnel intelligent (basé sur Google Gemini) pour répondre à toutes vos questions agronomiques.
+- **AGRIcultSmart IA** : Un assistant conversationnel intelligent (basé sur Google Gemini) pour répondre à toutes vos questions agronomiques.
 
 ## 🛠️ Stack Technique
 - **Backend** : Django (Python)

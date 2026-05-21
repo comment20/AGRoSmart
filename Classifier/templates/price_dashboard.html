@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intelligence des Marchés - AGROsmart</title>
+    <title>Intelligence des Marchés - AGRIcultSmart</title>
     <link rel="stylesheet" href="{% static 'price_dashboard.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -16,8 +16,17 @@
         <header>
             <div class="logo">
                 <a href="{% url 'selection' %}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
-                    <img src="{% static 'boval.jpg' %}" alt="Logo">
-                    <span>AGROsmart</span>
+                    <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width: 35px; height: 35px;">
+                        <defs>
+                          <linearGradient id="leafGradPrice" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#1a4d2e;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#4caf50;stop-opacity:1" />
+                          </linearGradient>
+                        </defs>
+                        <path d="M50 95C50 95 90 70 90 40C90 10 50 5 50 5C50 5 10 10 10 40C10 70 50 95 50 95Z" fill="url(#leafGradPrice)" />
+                        <path d="M50 20V80" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+                    </svg>
+                    <span style="font-weight: 800; font-size: 1.3rem; color: var(--e-primary);">AGRIcultSmart</span>
                 </a>
             </div>
             <nav>

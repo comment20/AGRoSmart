@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenue sur AGROsmart</title>
+    <title>Bienvenue sur AGRIcultSmart</title>
     <link rel="stylesheet" href="{% static 'connexion.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -15,14 +15,25 @@
         <div class="visual-section">
             <div class="visual-content">
                 <div class="logo-top">
-                    <img src="{% static 'boval.jpg' %}" alt="Logo">
-                    <span>AGROsmart</span>
+                    <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width: 45px; height: 45px;">
+                        <defs>
+                          <linearGradient id="leafGradDesktop" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.8" />
+                            <stop offset="100%" style="stop-color:#ffffff;stop-opacity:1" />
+                          </linearGradient>
+                        </defs>
+                        <path d="M50 95C50 95 90 70 90 40C90 10 50 5 50 5C50 5 10 10 10 40C10 70 50 95 50 95Z" fill="rgba(255,255,255,0.15)" stroke="white" stroke-width="2.5"/>
+                        <path d="M50 20V80" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.8" />
+                        <circle cx="30" cy="40" r="3" fill="white" />
+                        <circle cx="70" cy="55" r="3" fill="white" />
+                    </svg>
+                    <span style="font-weight: 800; font-size: 1.5rem; letter-spacing: -0.5px;">AGRIcultSmart</span>
                 </div>
                 <h1>L'avenir de l'agriculture  et du marché  agricole entre vos mains.</h1>
                 <p>Analysez votre type de sol et obtenez des recommandations de cultures adaptées à votre sol , suivez les prix du marché  grâce aux modèles de serie temporelles.</p>
             </div>
             <div class="visual-footer">
-                <p>© 2026 AGROsmart. Propulsé par  Tchoupe Germain Boval.</p>
+                <p>© 2026 AGRIcultSmart. Propulsé par  Tchoupe Germain Boval.</p>
             </div>
         </div>
 
@@ -31,7 +42,17 @@
             <div class="form-box">
                 <!-- Toggle Mobile (Logo visible uniquement sur petit écran) -->
                 <div class="mobile-logo">
-                    <img src="{% static 'boval.jpg' %}" alt="Logo">
+                    <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width: 50px; height: 50px; margin: 0 auto;">
+                        <defs>
+                          <linearGradient id="leafGradMobile" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#1a4d2e;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#4caf50;stop-opacity:1" />
+                          </linearGradient>
+                        </defs>
+                        <path d="M50 95C50 95 90 70 90 40C90 10 50 5 50 5C50 5 10 10 10 40C10 70 50 95 50 95Z" fill="url(#leafGradMobile)" />
+                        <path d="M50 20V80" stroke="white" stroke-width="3" stroke-linecap="round" />
+                    </svg>
+                    <div style="font-weight: 800; font-size: 1.2rem; color: #1a4d2e; margin-top: 5px;">AGRIcultSmart</div>
                 </div>
 
                 {% if messages %}

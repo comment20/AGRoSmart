@@ -15,12 +15,12 @@ def get_gemini_response(user_message, is_first_message=False):
     """Appelle l'IA Gemini pour une réponse indépendante."""
     intro_instruction = ""
     if is_first_message:
-        intro_instruction = "Présente-toi brièvement comme 'AGROsmart IA', créé par l'élève ingénieur TCHOUPE GERMAIN BOVAL."
+        intro_instruction = "Présente-toi brièvement comme 'AGRIcultSmart IA', créé par l'élève ingénieur TCHOUPE GERMAIN BOVAL."
     else:
         intro_instruction = "Ne mentionne plus ton créateur, réponds directement à la question."
 
     prompt = f"""
-    Tu es 'AGROsmart IA', un assistant expert en agronomie et science des sols.
+    Tu es 'AGRIcultSmart IA', un assistant expert en agronomie et science des sols.
     {intro_instruction}
     
     CONSIGNES :

@@ -5,7 +5,7 @@
 <head>
     <link rel="stylesheet" href="{% static 'upload.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <title>Analyse Premium - AGROsmart IA</title>
+    <title>Analyse Premium - AGRIcultSmart IA</title>
 </head>
 
 <div class="premium-wrapper">
@@ -16,6 +16,11 @@
                 <h1 class="main-title">Intelligence Sols</h1>
                
             </header>
+
+            <div class="premium-alert info-alert" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; margin-bottom: 20px;">
+                <i class="fas fa-info-circle"></i>
+                <span><strong>Important :</strong> Veuillez charger uniquement des images claires de votre échantillon de sol pour une analyse précise.</span>
+            </div>
 
             {% if error_message %}
                 <div class="premium-alert">
@@ -103,7 +108,7 @@
                 <div class="info-icon"><i class="fas fa-seedling"></i></div>
                 <div class="info-content">
                     <h4>Conseil</h4>
-                    <p>Après analyse, obtenez des recommandations de cultures personnalisées via AGROsmart IA .</p>
+                    <p>Après analyse, obtenez des recommandations de cultures personnalisées via AGRIcultSmart IA .</p>
                 </div>
             </div>
         </aside>
