@@ -33,4 +33,24 @@ document.addEventListener('DOMContentLoaded', () => {
             loginContainer.classList.add('active');
         }, 50);
     }
-});
+
+    // --- Fonctionnalité Afficher/Masquer le mot de passe ---
+    function setupPasswordToggle(toggleId, inputSelector) {
+        const toggle = document.getElementById(toggleId);
+        if (toggle) {
+            toggle.addEventListener('click', function() {
+                const input = toggle.parentElement.querySelector('input');
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+
+                // Basculer l'icône
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+        }
+    }
+
+    setupPasswordToggle('toggleLoginPassword');
+    setupPasswordToggle('toggleSignupPassword1');
+    setupPasswordToggle('toggleSignupPassword2');
+    });

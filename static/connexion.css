@@ -134,6 +134,29 @@ h2 {
     margin-bottom: 20px;
 }
 
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    padding-right: 45px; /* Espace pour l'icône */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: var(--transition);
+    z-index: 10;
+}
+
+.toggle-password:hover {
+    color: var(--primary-color);
+}
+
 .input-row {
     display: flex;
     gap: 16px;
@@ -237,10 +260,56 @@ input:focus {
 }
 
 @media (max-width: 768px) {
-    .visual-section { display: none; }
-    .mobile-logo { display: block; }
-    .form-section { flex: 1; }
-    body { overflow-y: auto; }
+    .main-container {
+        flex-direction: column;
+    }
+
+    .visual-section { 
+        display: none; 
+    }
+    
+    .mobile-logo { 
+        display: block; 
+    }
+
+    .form-section { 
+        flex: 1; 
+        padding: 30px 20px;
+        align-items: flex-start;
+        padding-top: 50px;
+    }
+
+    .form-box {
+        max-width: 100%;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+        text-align: center;
+    }
+
+    .subtitle {
+        text-align: center;
+        margin-bottom: 24px;
+    }
+
+    .input-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    body { 
+        overflow-y: auto; 
+    }
+}
+
+@media (max-height: 700px) and (max-width: 768px) {
+    .form-section {
+        padding-top: 30px;
+    }
+    .mobile-logo {
+        margin-bottom: 15px;
+    }
 }
 
 .separator {

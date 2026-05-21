@@ -173,3 +173,64 @@ canvas {
         font-size: 1.75rem;
     }
 }
+
+@media (max-width: 768px) {
+    .dashboard-page-container {
+        padding: 30px 15px;
+    }
+
+    .filter-card {
+        flex-direction: column;
+        padding: 20px;
+        width: 100%;
+        gap: 10px;
+        align-items: stretch;
+    }
+
+    .filter-card label {
+        text-align: center;
+        font-size: 0.9rem;
+    }
+
+    .locality-dropdown {
+        min-width: auto;
+        width: 100%;
+        text-align: center;
+    }
+
+    .dashboard-header-title {
+        font-size: 1.5rem;
+        margin-bottom: 25px;
+    }
+
+    .dashboard-section {
+        margin-bottom: 40px;
+    }
+
+    .chart-card {
+        padding: 15px;
+        border-radius: 15px;
+    }
+
+    .chart-card h3 {
+        font-size: 0.75rem;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    /* Rendre les cercles fluides sur mobile */
+    .pie-wrapper {
+        width: 100%;
+        max-width: 220px;
+        height: 220px;
+    }
+
+    .hist-wrapper {
+        height: 200px;
+    }
+
+    .full-width .chart-wrapper {
+        height: 300px;
+    }
+}
+
