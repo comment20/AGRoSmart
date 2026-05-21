@@ -383,6 +383,75 @@ td:last-child { border-right: 1px solid #f3f3f3; border-radius: 0 20px 20px 0; }
     color: var(--e-primary);
 }
 
+/* Style du bouton d'exportation amélioré */
+.btn-outline {
+    background: transparent;
+    color: var(--e-primary);
+    border: 2px solid var(--e-primary);
+    padding: 10px 20px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-outline:hover {
+    background: var(--e-primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px var(--e-primary-glow);
+}
+
+.btn-outline:active {
+    transform: translateY(0);
+}
+
+/* Map Legend Premium Styling */
+.map-legend {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 25px;
+    padding: 15px 20px;
+    background: #f8fafc;
+    border-radius: 16px;
+    border: 1px solid var(--e-border);
+}
+
+.legend-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--e-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.legend-bar {
+    flex-grow: 1;
+    height: 10px;
+    background: linear-gradient(to right, #16a34a, #facc15, #e11d48);
+    border-radius: 10px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+    .map-legend {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .legend-bar {
+        width: 100%;
+        height: 8px;
+    }
+}
+
 /* Responsive Overrides */
 @media (max-width: 1300px) {
     .kpi-row { grid-template-columns: repeat(3, 1fr); }
@@ -415,4 +484,97 @@ td:last-child { border-right: 1px solid #f3f3f3; border-radius: 0 20px 20px 0; }
     }
 
     nav a.logout { margin-left: 0; }
+
+    /* Optimisation de la section Prévisions pour Mobile */
+    .forecast-table-card {
+        padding: 20px;
+    }
+
+    .forecast-table-card .card-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .forecast-table-card h3 {
+        font-size: 18px;
+        margin: 0;
+    }
+
+    .btn-outline {
+        justify-content: center;
+        width: 100%;
+    }
+
+    /* Transformation du tableau en cartes sur mobile */
+    #forecast-table, 
+    #forecast-table thead, 
+    #forecast-table tbody, 
+    #forecast-table th, 
+    #forecast-table td, 
+    #forecast-table tr { 
+        display: block; 
+    }
+
+    #forecast-table thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    #forecast-table tr {
+        background: #fff;
+        border: 1px solid var(--e-border);
+        border-radius: 18px;
+        margin-bottom: 15px;
+        padding: 15px;
+        box-shadow: var(--e-shadow-sm);
+        transition: transform 0.2s ease;
+    }
+
+    #forecast-table tr:hover {
+        transform: scale(1.02);
+    }
+
+    #forecast-table td {
+        border: none;
+        padding: 10px 0;
+        position: relative;
+        padding-left: 45%;
+        text-align: right;
+        border-bottom: 1px solid #f8f9fa;
+    }
+
+    #forecast-table td:last-child {
+        border-bottom: none;
+    }
+
+    #forecast-table td:before {
+        position: absolute;
+        left: 0;
+        width: 40%;
+        text-align: left;
+        font-weight: 700;
+        color: var(--e-muted);
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Ajout des étiquettes pour chaque cellule */
+    #forecast-table td:nth-of-type(1):before { content: "Mois"; }
+    #forecast-table td:nth-of-type(2):before { content: "Prix Estimé"; }
+    #forecast-table td:nth-of-type(3):before { content: "Variation"; }
+
+    #forecast-table td:first-child, 
+    #forecast-table td:last-child {
+        border-radius: 0;
+    }
+
+    .price-cell {
+        font-size: 18px !important;
+    }
 }
+

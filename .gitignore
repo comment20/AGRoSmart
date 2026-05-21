@@ -13,7 +13,6 @@ db.sqlite3
 db.sqlite3-journal
 
 # Fichiers médias (images uploadées)
-media/
 staticfiles/
 
 # Secrets et Configuration

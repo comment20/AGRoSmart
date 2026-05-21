@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="{% static 'chatbot.css' %}">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
   <title>Analyse des sols</title>
 
@@ -55,6 +56,32 @@
         navToggle.classList.toggle('is-active');
     });
 </script>
+
+{% if user.is_authenticated %}
+<!-- Chatbot Icon -->
+<div class="chatbot-icon" id="chatbot-icon">
+    <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM19 15H6L4 17V4H19V15Z"/>
+    </svg>
+</div>
+
+<!-- Chatbot Window -->
+<div class="chatbot-window" id="chatbot-window">
+    <div class="chatbot-header">
+        <span>AGROsmart IA</span>
+        <div>
+            <button class="clear-btn" id="clear-chat-btn" title="Effacer la conversation">&#128465;</button>
+            <button class="close-btn" id="close-chatbot-btn">&times;</button>
+        </div>
+    </div>
+    <div class="chatbot-messages" id="chatbot-messages"></div>
+    <div class="chatbot-input">
+        <input type="text" id="chatbot-input-field" placeholder="Tapez votre message...">
+        <button id="send-message-btn">Envoyer</button>
+    </div>
+</div>
+<script src="{% static 'chatbot.js' %}"></script>
+{% endif %}
 
 </body>
 </html>
