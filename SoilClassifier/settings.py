@@ -162,7 +162,9 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'AGRIcultSmart <noreply@agricultsmart.com>')
+
+# Sécurité : Utiliser l'adresse Gmail comme expéditeur par défaut pour éviter le rejet par Google
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
 
 # Clé API Google Gemini (Obtenez-la sur https://aistudio.google.com/)
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', "")
